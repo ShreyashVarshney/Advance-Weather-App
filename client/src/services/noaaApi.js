@@ -1,35 +1,77 @@
 import axios from 'axios'
+import {
+  getMockStation,
+  getMockDaily,
+  getMockMonthly,
+  getMockRecords,
+} from './mockFallback'
 
 const API_BASE = import.meta.env.VITE_API_URL 
   ? `${import.meta.env.VITE_API_URL}/noaa` 
   : '/api/noaa'
-const api = axios.create({ baseURL: API_BASE })
+const api = axios.create({ baseURL: API_BASE, timeout: 6000 })
 
 export const noaaApi = {
-  /** List available CDO datasets */
-  getDatasets: () => api.get('/datasets').then(r => r.data),
+  getDatasets: async () => {
+    try {
+      const res = await api.get('/datasets')
+      return res.data
+    } catch {
+      return { results: [] }
+    }
+  },
 
-  /** Find nearest GHCND station for lat/lon */
-  getStation: (lat, lon) => api.get('/station', { params: { lat, lon } }).then(r => r.data),
+  getStation: async (lat, lon) => {
+    try {
+      const res = await api.get('/station', { params: { lat, lon } })
+      return res.data
+    } catch {
+      return getMockStation()
+    }
+  },
 
-  /** Last N days of daily observations (TMAX, TMIN, PRCP, AWND, SNOW) */
-  getDailyHistory: (lat, lon, days = 30) =>
-    api.get('/history/daily', { params: { lat, lon, days } }).then(r => r.data),
+  getDailyHistory: async (lat, lon, days = 30) => {
+    try {
+      const res = await api.get('/history/daily', { params: { lat, lon, days } })
+      return res.data
+    } catch {
+      return getMockDaily()
+    }
+  },
 
-  /** Monthly summaries for a given year */
-  getMonthlyHistory: (lat, lon, year) =>
-    api.get('/history/monthly', { params: { lat, lon, year } }).then(r => r.data),
+  getMonthlyHistory: async (lat, lon, year) => {
+    try {
+      const res = await api.get('/history/monthly', { params: { lat, lon, year } })
+      return res.data
+    } catch {
+      return getMockMonthly()
+    }
+  },
 
-  /** All-time temperature & precipitation records */
-  getRecords: (lat, lon) => api.get('/records', { params: { lat, lon } }).then(r => r.data),
+  getRecords: async (lat, lon) => {
+    try {
+      const res = await api.get('/records', { params: { lat, lon } })
+      return res.data
+    } catch {
+      return getMockRecords()
+    }
+  },
 
-  /** 30-year climate normals */
-  getNormals: (lat, lon) => api.get('/normals', { params: { lat, lon } }).then(r => r.data),
+  getNormals: async (lat, lon) => {
+    try {
+      const res = await api.get('/normals', { params: { lat, lon } })
+      return res.data
+    } catch {
+      return { mock: true, data: [] }
+    }
+  },
 
-  /**
-   * Generic CDO proxy — hit any CDO endpoint directly
-   * e.g. noaaApi.proxy('datatypes', { datasetid: 'GHCND', limit: 10 })
-   */
-  proxy: (endpoint, params = {}) =>
-    api.get(`/proxy/${endpoint}`, { params }).then(r => r.data),
+  proxy: async (endpoint, params = {}) => {
+    try {
+      const res = await api.get(`/proxy/${endpoint}`, { params })
+      return res.data
+    } catch {
+      return { results: [] }
+    }
+  },
 }

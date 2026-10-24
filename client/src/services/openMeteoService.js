@@ -63,14 +63,15 @@ export async function geocodeCity(cityName) {
 
 export async function reverseGeocodeCoords(lat, lon) {
   try {
-    const res = await fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lon}&localityLanguage=en`)
+    const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&timezone=auto`)
     const data = await res.json()
+    const name = data.timezone ? data.timezone.split('/').pop().replace(/_/g, ' ') : 'Current Location'
     return {
-      name: data.city || data.locality || data.principalSubdivision || 'Current Location',
-      country: data.countryCode || '',
+      name,
+      country: '',
     }
   } catch {
-    return { name: 'Location', country: '' }
+    return { name: 'Current Location', country: '' }
   }
 }
 

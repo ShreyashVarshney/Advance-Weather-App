@@ -2,14 +2,12 @@ import { useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import toast from 'react-hot-toast'
 import { useWeather } from './hooks/useWeather'
-import { useNoaa } from './hooks/useNoaa'
 import Header from './components/Header'
 import HeroCard from './components/HeroCard'
 import StatsGrid from './components/StatsGrid'
 import AQICard from './components/AQICard'
 import HourlyForecast from './components/HourlyForecast'
 import WeeklyForecast from './components/WeeklyForecast'
-import NOAAPanel from './components/NOAAPanel'
 import './App.css'
 
 function LoadingSpinner() {
@@ -39,9 +37,6 @@ export default function App() {
     addFavorite, toggleUnit,
     deleteHistory, deleteFavorite,
   } = useWeather()
-
-  // NOAA historical data for current location
-  const noaa = useNoaa(current?.lat, current?.lon)
 
   // Geolocation
   const handleGeolocate = () => {
@@ -133,16 +128,6 @@ export default function App() {
                 {aqi && <AQICard data={aqi} />}
                 {forecast && <HourlyForecast data={forecast} unit={unit} timezone={current.timezone} />}
                 {forecast && <WeeklyForecast data={forecast} unit={unit} timezone={current.timezone} />}
-
-                {/* NOAA Climate Data Panel */}
-                <NOAAPanel
-                  daily={noaa.daily}
-                  monthly={noaa.monthly}
-                  records={noaa.records}
-                  station={noaa.station}
-                  unit={unit}
-                  isMock={noaa.isMock}
-                />
 
                 {/* Map */}
                 <motion.section

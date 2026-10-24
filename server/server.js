@@ -7,7 +7,6 @@ const rateLimit = require('express-rate-limit');
 
 const weatherRoutes = require('./routes/weather');
 const searchRoutes = require('./routes/search');
-const noaaRoutes = require('./routes/noaa');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -31,17 +30,38 @@ mongoose
   .then(() => console.log('✅ MongoDB connected'))
   .catch((err) => console.warn('⚠️  MongoDB not connected (running without DB):', err.message));
 
+const path = require('path');
+const fs = require('fs');
+
 // ─── Routes ──────────────────────────────────────────────────────────────────
 app.use('/api/weather', weatherRoutes);
 app.use('/api/search', searchRoutes);
-app.use('/api/noaa', noaaRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', time: new Date().toISOString() });
 });
 
-// 404 handler
+// Serve frontend static assets from client/dist (Single Localhost on Port 5000)
+const clientDist = path.join(__dirname, '../client/dist');
+if (fs.existsSync(clientDist)) {
+  app.use(express.static(clientDist));
+  app.get('*', (req, res, next) => {
+    if (req.path.startsWith('/api')) return next();
+    res.sendFile(path.join(clientDist, 'index.html'));
+  });
+} else {
+  app.get('/', (req, res) => {
+    res.redirect('http://localhost:5173');
+  });
+}
+
+// 404 handler for unmatched API routes
+app.use('/api', (req, res) => {
+  res.status(404).json({ error: 'API route not found' });
+});
+
+// General 404 handler
 app.use((req, res) => {
   res.status(404).json({ error: 'Route not found' });
 });
@@ -54,5 +74,5 @@ app.use((err, req, res, next) => {
 
 app.listen(PORT, () => {
   console.log(`🚀 SkyCast server running on http://localhost:${PORT}`);
-  console.log(`📡 API key configured: ${process.env.OPENWEATHER_API_KEY ? 'YES' : 'NO (using mock data)'}`);
+  console.log('📡 Weather Provider: Open-Meteo API (Live, no API key required)');
 });

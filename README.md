@@ -48,12 +48,6 @@ npm run dev
 - **React app** → http://localhost:5173  
 - **Express API** → http://localhost:5000
 
-## 🔑 Getting an API Key
-
-1. Sign up free at [openweathermap.org](https://openweathermap.org/api)
-2. Go to your API keys and copy the key
-3. Paste it into `server/.env` as `OPENWEATHER_API_KEY`
-
 ## 🌟 Features
 
 | Feature | Details |
@@ -64,35 +58,16 @@ npm run dev
 | ⏱ Hourly Forecast | Next 27 hours with area chart |
 | 📅 7-Day Forecast | Daily high/low breakdown |
 | 🌿 AQI | Air quality + 6 pollutant breakdown |
-| 📈 **NOAA 30-Day History** | Real daily TMAX/TMIN/PRCP from GHCND stations |
-| 📅 **NOAA Monthly Summary** | Monthly temperature range + precipitation charts |
-| 🏆 **NOAA Records** | All-time high, low, and rainfall records |
 | ⭐ Favorites | Save cities to MongoDB |
 | 🕓 Search History | Recent searches stored in MongoDB |
 | 🗺 Map | OpenStreetMap embed for location |
 | 📱 Responsive | Optimized for mobile + desktop |
-| 🎨 Demo Mode | Works without API keys using rich mock data |
 
 ## 🌐 APIs Used
 
 | API | Purpose | Token |
 |---|---|---|
-| [OpenWeatherMap](https://openweathermap.org/api) | Current weather, forecast, AQI | `OPENWEATHER_API_KEY` in `server/.env` |
-| [NOAA CDO v2](https://www.ncei.noaa.gov/cdo-web/api/v2/) | Historical climate data, records, normals | `NOAA_CDO_TOKEN` in `server/.env` |
-
-### NOAA CDO Endpoints Used
-
-```
-GET /api/noaa/datasets              → List available CDO datasets
-GET /api/noaa/station?lat=&lon=     → Find nearest GHCND weather station
-GET /api/noaa/history/daily         → Last 30 days: TMAX, TMIN, PRCP, AWND, SNOW
-GET /api/noaa/history/monthly       → Monthly summaries (GSOM dataset)
-GET /api/noaa/records               → All-time temperature & rain records
-GET /api/noaa/normals               → 30-year climate normals
-GET /api/noaa/proxy/:endpoint       → Generic CDO passthrough proxy
-```
-
-Get a free NOAA token at: https://www.ncdc.noaa.gov/cdo-web/token
+| [Open-Meteo](https://open-meteo.com/) | Real-time weather, hourly/7-day forecast, AQI & geocoding (Single API) | None (100% Free & Live) |
 
 
 ## 🛠 Tech Stack

@@ -3,6 +3,8 @@
   "version": "1.0.0",
   "description": "SkyCast - Advanced MERN Weather App",
   "scripts": {
+    "start": "npm run build && cd server && node server.js",
+    "build": "cd client && npm run build",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
     "server": "cd server && npm run dev",
     "client": "cd client && npm run dev",

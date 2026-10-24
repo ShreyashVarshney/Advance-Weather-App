@@ -1,6 +1,9 @@
 import axios from 'axios'
 
-const api = axios.create({ baseURL: '/api/noaa' })
+const API_BASE = import.meta.env.VITE_API_URL 
+  ? `${import.meta.env.VITE_API_URL}/noaa` 
+  : '/api/noaa'
+const api = axios.create({ baseURL: API_BASE })
 
 export const noaaApi = {
   /** List available CDO datasets */

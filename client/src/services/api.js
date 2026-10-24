@@ -1,6 +1,7 @@
 import axios from 'axios'
 
-const api = axios.create({ baseURL: '/api' })
+const API_BASE = import.meta.env.VITE_API_URL || '/api'
+const api = axios.create({ baseURL: API_BASE })
 
 export const weatherApi = {
   getCurrent: (params) => api.get('/weather/current', { params }).then(r => r.data),

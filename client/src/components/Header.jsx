@@ -29,11 +29,10 @@ export default function Header({ onSearch, onGeolocate, onToggleUnit, unit, hist
     }, 300)
   }, [query])
 
-  const handleSelect = (city, lat, lon) => {
+  const handleSelect = (city, lat = null, lon = null, country = null) => {
     setQuery(city)
     setShowDropdown(false)
-    if (lat && lon) onSearch(city)
-    else onSearch(city)
+    onSearch(city, lat, lon, country)
   }
 
   const handleSubmit = (e) => {
@@ -94,7 +93,7 @@ export default function Header({ onSearch, onGeolocate, onToggleUnit, unit, hist
                   {loading && <li className="dd-info">Searching…</li>}
                   {!loading && suggestions.length === 0 && query.length >= 2 && <li className="dd-info">No results</li>}
                   {suggestions.map((s, i) => (
-                    <li key={i} onClick={() => handleSelect(s.name, s.lat, s.lon)}>
+                    <li key={i} onClick={() => handleSelect(s.name, s.lat, s.lon, s.country)}>
                       <MapPin size={12} />
                       <span>{s.name}</span>
                       <small>{s.state ? `${s.state}, ` : ''}{s.country}</small>
@@ -108,7 +107,7 @@ export default function Header({ onSearch, onGeolocate, onToggleUnit, unit, hist
                   {history.length === 0 && <li className="dd-info">No recent searches</li>}
                   {history.map((h, i) => (
                     <li key={i} className="has-action">
-                      <span onClick={() => handleSelect(h.city)}><History size={12}/> {h.city}</span>
+                      <span onClick={() => handleSelect(h.city, h.lat, h.lon, h.country)}><History size={12}/> {h.city}</span>
                       <button onClick={(e) => { e.stopPropagation(); onDeleteHistory(h._id) }}><X size={12}/></button>
                     </li>
                   ))}
@@ -120,7 +119,7 @@ export default function Header({ onSearch, onGeolocate, onToggleUnit, unit, hist
                   {favorites.length === 0 && <li className="dd-info">No favorite cities yet</li>}
                   {favorites.map((f, i) => (
                     <li key={i} className="has-action">
-                      <span onClick={() => { onSelectFavorite(f.city); setShowDropdown(false) }}><Star size={12}/> {f.city}</span>
+                      <span onClick={() => { onSelectFavorite(f.city, f.lat, f.lon, f.country); setShowDropdown(false) }}><Star size={12}/> {f.city}</span>
                       <button onClick={(e) => { e.stopPropagation(); onDeleteFavorite(f._id) }}><X size={12}/></button>
                     </li>
                   ))}

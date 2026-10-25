@@ -122,6 +122,7 @@
   transition: all 0.2s;
 }
 .fav-btn:hover { color: #f87171; background: rgba(239,68,68,0.12); border-color: rgba(239,68,68,0.3); }
+.fav-btn.active { color: #f43f5e; background: rgba(244,63,94,0.18); border-color: rgba(244,63,94,0.45); }
 /* Animated weather icon */
 .weather-anim-wrap {
   position: relative;

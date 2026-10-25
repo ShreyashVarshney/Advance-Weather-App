@@ -123,7 +123,12 @@ export default function App() {
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.3 }}
               >
-                <HeroCard data={current} unit={unit} onAddFavorite={addFavorite} />
+                <HeroCard
+                  data={current}
+                  unit={unit}
+                  onAddFavorite={addFavorite}
+                  isFavorite={favorites.some(f => f.city?.toLowerCase() === current?.city?.toLowerCase())}
+                />
                 <StatsGrid data={current} unit={unit} />
                 {aqi && <AQICard data={aqi} />}
                 {forecast && <HourlyForecast data={forecast} unit={unit} timezone={current.timezone} />}

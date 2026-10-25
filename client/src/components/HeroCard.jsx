@@ -3,7 +3,7 @@ import { Heart, Wind, Droplets } from 'lucide-react'
 import { formatTemp, formatTime, formatDate, windDirection, getWeatherTheme } from '../utils/helpers'
 import './HeroCard.css'
 
-export default function HeroCard({ data, unit, onAddFavorite }) {
+export default function HeroCard({ data, unit, onAddFavorite, isFavorite = false }) {
   if (!data) return null
 
   const theme = getWeatherTheme(data.weather?.[0]?.id)
@@ -62,8 +62,17 @@ export default function HeroCard({ data, unit, onAddFavorite }) {
 
         {/* Right */}
         <div className="hero-right">
-          <button className="fav-btn" id="addFavoriteBtn" onClick={onAddFavorite} title="Add to favorites">
-            <Heart size={18} />
+          <button
+            className={`fav-btn ${isFavorite ? 'active' : ''}`}
+            id="addFavoriteBtn"
+            onClick={onAddFavorite}
+            title={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
+          >
+            <Heart
+              size={18}
+              fill={isFavorite ? '#f43f5e' : 'none'}
+              color={isFavorite ? '#f43f5e' : 'currentColor'}
+            />
           </button>
 
           <div className={`weather-anim-wrap anim-${theme.anim}`}>
